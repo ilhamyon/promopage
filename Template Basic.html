@@ -1,0 +1,678 @@
+<!-- NOTES: =============================================================== -->
+<!-- Can only use JQuery ! Must not import other extarnal framework/library -->
+<!-- ====================================================================== -->
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+
+<style>
+	@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap');
+</style>
+
+<style type="text/css">
+	.promo-page {
+		font-family: 'Open Sans', sans-serif;
+		background-image: none;
+		background-position: center top;
+		background-repeat: no-repeat;
+		position: relative;
+		margin-left: auto;
+		margin-right: auto;
+		width: 980px;
+		display: block;
+	}
+
+	.header-navbar {
+		width: 100%;
+		overflow: auto;
+		display: flex;
+	}
+
+	.header-navbar a {
+		float: left;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background-color: #010101;
+		padding: 3px 5%;
+		margin: 1px;
+		color: white;
+		text-decoration: none;
+		font-size: .75em;
+		font-weight: bold;
+		width: 20%;
+		text-align: center;
+	}
+
+	.header-navbar a:hover {
+		background-color: #555;
+	}
+
+	/* Slider */
+	.content-slider {
+		max-width: 980px;
+		position: relative;
+		margin-right: auto;
+	}
+
+	.slider-image {
+		width: 100%;
+	}
+
+	.slider {
+		display: none;
+	}
+
+	.prev, .next {
+		cursor: pointer;
+		position: absolute;
+		top: 50%;
+		width: auto;
+		margin-top: -22px;
+		padding: 16px;
+		color: white;
+		font-weight: bold;
+		font-size: 28px;
+		color: #555;
+		transition: 0.6s ease;
+		border-radius: 0 3px 3px 0;
+		user-select: none;
+	}
+
+	.next {
+		right: 0;
+		border-radius: 3px 0 0 3px;
+	}
+
+	.slider-menu {
+		width: 100%;
+		overflow: auto;
+		display: flex;
+	}
+
+	.slider-menu .slide-menu {
+		float: left;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		/* background-color: #010101; */
+		padding: 3px 5%;
+		margin: 1px;
+		color: #010101;
+		text-decoration: none;
+		font-size: 1em;
+		font-weight: bold;
+		width: 33.33%;
+		text-align: center;
+		cursor: pointer;
+		transition: background-color 0.6s ease;
+	}
+
+	.active, .slide-menu:hover {
+		background-color: #717171;
+	}
+
+	.fade {
+		-webkit-animation-name: fade;
+		-webkit-animation-duration: 1.5s;
+		animation-name: fade;
+		animation-duration: 1.5s;
+	}
+
+	@-webkit-keyframes fade {
+		from {opacity: .4}
+		to {opacity: 1}
+	}
+
+	@keyframes fade {
+		from {opacity: .4}
+		to {opacity: 1}
+	}
+
+	/* Tabs */
+	.product-tabs {
+		width: 100%;
+		margin: 0;
+	}
+
+	.tab-menu {
+		background-color: #555;
+		color: white;
+		float: left;
+		border: none;
+		outline: none;
+		cursor: pointer;
+		padding: 14px 16px;
+		font-size: 17px;
+		width: 50%;
+	}
+
+	.tab-menu:hover {
+		background-color: #777;
+	}
+
+	.content-product {
+		display: flex;
+	}
+
+	.tabcontent {
+		width: 100%;
+		display: flex;
+		align-content: center;
+	}
+
+	.product {
+		position: relative;
+		width: 25%;
+		cursor: pointer;
+	}
+
+	.product-discount, .product-status {
+		position: absolute;
+		top: 0px;
+		left: 0px;
+	}
+
+	.product-discount {
+		background-color: #000;
+		width: 13%;
+		height: 10%;
+		opacity: .8;
+		z-index: 5;
+	}
+
+	.discount-price {
+		display: relative;
+		margin: auto;
+		opacity: 1;
+		color: #fff;
+	}
+
+	.product-image {
+		z-index: 4;
+	}
+
+	.product-name {
+		width: 100%;
+		font-size: 1em;
+		font-weight: bold;
+		text-align: center;
+	}
+
+	.product-price-currency {
+		font-size: .82em;
+		font-weight: bold;
+		text-align: center;
+	}
+
+	.product-price, .product-price-discount {
+		font-size: .85em;
+		font-weight: bold;
+		text-align: center;
+	}
+
+	.product-price {
+		text-decoration: line-through;
+	}
+
+	.product-status {
+		z-index: 6;
+	}
+
+	#weekday, #weekend {
+		/* background-color: #2896a8; */
+	}
+
+	#weekday {
+		display: none;
+	}
+
+	.open {
+		display: none;
+	}
+
+	.close {
+		display: block;
+	}
+
+	/* Collapsible Bottom */
+	.collapsible-bottom {
+		width: 100%;
+	}
+
+	.collapsible {
+	  background-color: #2896a8;
+	  color: #fff;
+	  cursor: pointer;
+	  padding: 18px;
+	  width: 100%;
+	  border: none;
+	  text-align: left;
+	  outline: none;
+	  font-size: 15px;
+	}
+
+	.collapsible-button {
+		width: 30%;
+		padding-right: 70%;
+		/* background-color: #2896a8; */
+	}
+
+	.active, .collapsible:hover {
+	  background-color: #ccc;
+	}
+
+	.content {
+		position: relative;
+		padding: 0 18px;
+		display: flex;
+		overflow: hidden;
+		background-color: #2896a8;
+	}
+
+	.content-label {
+		width: 70%;
+		font-size: .75em;
+		font-weight: bold;
+		color: #fff;
+		padding: 20px 0px;
+	}
+
+	.content-cta {
+		width: 30%;
+		margin: auto
+	}
+
+	@media only screen and (max-width: 980px) {
+		.content-product {
+			display: block;
+			width: 100%;
+		}
+
+		.product {
+			float: left;
+			width: 50%;
+			margin: 0;
+			cursor: pointer;
+		}
+
+		.product-image {
+			width: 100%;
+			z-index: 4;
+		}
+
+		.product-status {
+			width: 100%;
+		}
+
+		.product-status-image {
+			width: 100%;
+		}
+	}
+</style>
+
+
+
+
+
+<div class="promo-page">
+	<div class="header-banner">
+		<img src="Asset/header.png" alt="" />
+	</div>
+
+	<div class="header-navbar">
+		<a href="javascript:void(0)">BRAND</a>
+		<a href="javascript:void(0)">FREE SHIPPING INDONESIA</a>
+		<a href="javascript:void(0)">E-APOTEK</a>
+		<a href="javascript:void(0)">PERFUME &amp; DEODORANT</a>
+		<a href="javascript:void(0)">BATH &amp; BODY CARE</a>
+	</div>
+
+	<div class="content-slider">
+		<div class="slider fade">
+			<img class="slider-image" src="Asset/slide1.png" alt="" />
+		</div>
+
+		<div class="slider fade">
+			<img class="slider-image" src="Asset/slide2.png" alt="" />
+		</div>
+
+		<div class="slider fade">
+			<img class="slider-image" src="Asset/slide3.png" alt="" />
+		</div>
+
+		<a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+		<a class="next" onclick="plusSlides(1)">&#10095;</a>
+
+		<div class="slider-menu">
+			<span class="slide-menu" onclick="showSlides(1)">KOLEKSI BATIK PRIA</span>
+			<span class="slide-menu" onclick="showSlides(2)">ACCESSORIES &amp; JEWELRY</span>
+			<span class="slide-menu" onclick="showSlides(3)">SMART TV</span>
+		</div>
+	</div>
+
+	<div class="product-tabs">
+		<button id="button-weekday" class="tab-menu" onclick="openTab('weekday', this, '#2896a8')">WEEKDAY</button>
+		<button id="button-weekend" class="tab-menu" onclick="openTab('weekend', this, '#2896a8')">WEEKEND</button>
+
+		<div id="weekday" class="tabcontent">
+			<div class="content-product">
+				<div class="product product1 weekday">
+					<div class="product-discount">
+						<span class="discount-price">94%</span>
+					</div>
+					<img class="product-image" src="Asset/item1.png" alt="" />
+					<div class="product-name">
+						<span class="product-name">JAM TANGAN WANITA</span>
+					</div>
+					<div class="product-price-currency">RP.
+						<span class="product-price">1.500.000</span>
+					</div>
+					<div class="product-price-currency">RP.
+						<span class="product-price-discount">92.100</span>
+					</div>
+					<div class="product-status">
+						<img class="product-status-image" src="Asset/overlay.png" alt="" />
+					</div>
+				</div>
+
+				<div class="product product2 weekday">
+					<div class="product-discount">
+						<span class="discount-price">93%</span>
+					</div>
+					<img class="product-image" src="Asset/item2.png" alt="" />
+					<div class="product-name">
+						<span class="product-name">JAM TANGAN PRIA</span>
+					</div>
+					<div class="product-price-currency">RP.
+						<span class="product-price">2.500.000</span>
+					</div>
+					<div class="product-price-currency">RP.
+						<span class="product-price-discount">185.100</span>
+					</div>
+					<div class="product-status">
+						<img class="product-status-image" src="Asset/overlay.png" alt="" />
+					</div>
+				</div>
+
+				<div class="product product3 weekday">
+					<div class="product-discount">
+						<span class="discount-price">92%</span>
+					</div>
+					<img class="product-image" src="Asset/item3.png" alt="" />
+					<div class="product-name">
+						<span class="product-name">NEW LOVELY WOMEN BUCKLE</span>
+					</div>
+					<div class="product-price-currency">RP.
+						<span class="product-price">476.000</span>
+					</div>
+					<div class="product-price-currency">RP.
+						<span class="product-price-discount">36.300</span>
+					</div>
+					<div class="product-status">
+						<img class="product-status-image" src="Asset/overlay.png" alt="" />
+					</div>
+				</div>
+
+				<div class="product product4 weekday">
+					<div class="product-discount">
+						<span class="discount-price">91%</span>
+					</div>
+					<img class="product-image" src="Asset/item4.png" alt="" />
+					<div class="product-name">
+						<span class="product-name">NEW MENS AUTOMATIC BUCKLE</span>
+					</div>
+					<div class="product-price-currency">RP.
+						<span class="product-price">940.000</span>
+					</div>
+					<div class="product-price-currency">RP.
+						<span class="product-price-discount">82.800</span>
+					</div>
+					<div class="product-status">
+						<img class="product-status-image" src="Asset/overlay.png" alt="" />
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div id="weekend" class="tabcontent">
+			<div class="content-product">
+				<div class="product product1 weekend">
+					<div class="product-discount"><span class="discount-price">94%</span></div>
+					<img class="product-image" src="Asset/item1.png" alt="" />
+					<div class="product-name">
+						<span class="product-name">JAM TANGAN WANITA</span>
+					</div>
+					<div class="product-price-currency">RP.
+						<span class="product-price">1.500.000</span>
+					</div>
+					<div class="product-price-currency">RP.
+						<span class="product-price-discount">92.100</span>
+					</div>
+					<div class="product-status">
+						<img class="product-status-image" src="Asset/overlay.png" alt="" />
+					</div>
+				</div>
+
+				<div class="product product2 weekend">
+					<div class="product-discount"><span class="discount-price">93%</span></div>
+					<img class="product-image" src="Asset/item2.png" alt="" />
+					<div class="product-name">
+						<span class="product-name">JAM TANGAN PRIA</span>
+					</div>
+					<div class="product-price-currency">RP.
+						<span class="product-price">2.500.000</span>
+					</div>
+					<div class="product-price-currency">RP.
+						<span class="product-price-discount">185.100</span>
+					</div>
+					<div class="product-status">
+						<img class="product-status-image" src="Asset/overlay.png" alt="" />
+					</div>
+				</div>
+
+				<div class="product product3 weekend">
+					<div class="product-discount"><span class="discount-price">92%</span></div>
+					<img class="product-image" src="Asset/item3.png" alt="" />
+					<div class="product-name">
+						<span class="product-name">NEW LOVELY WOMEN BUCKLE</span>
+					</div>
+					<div class="product-price-currency">RP.
+						<span class="product-price">476.000</span>
+					</div>
+					<div class="product-price-currency">RP.
+						<span class="product-price-discount">36.300</span>
+					</div>
+					<div class="product-status">
+						<img class="product-status-image" src="Asset/overlay.png" alt="" />
+					</div>
+				</div>
+
+				<div class="product product4 weekend">
+					<div class="product-discount"><span class="discount-price">91%</span></div>
+					<img class="product-image" src="Asset/item4.png" alt="" />
+					<div class="product-name">
+						<span class="product-name">NEW MENS AUTOMATIC BUCKLE</span>
+					</div>
+					<div class="product-price-currency">RP.
+						<span class="product-price">940.000</span>
+					</div>
+					<div class="product-price-currency">RP.
+						<span class="product-price-discount">82.800</span>
+					</div>
+					<div class="product-status">
+						<img class="product-status-image" src="Asset/overlay.png" alt="" />
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="collapsible-bottom">
+		<div class="collapsible-button">
+			<button type="button" class="collapsible">SYARAT &amp; KETENTUAN</button>
+		</div>
+
+		<div class="content" style="display:flex">
+			<div class="content-label">
+				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. In sollicitudin mi imperdiet ex rhoncus, eget sollicitudin erat elementum. Fusce porttitor augue non ultricies feugiat. Maecenas ullamcorper in tortor id dapibus. Sed ante mauris, cursus a molestie nec, hendrerit eget tellus. Etiam ut dolor ac libero ultrices commodo congue a velit. Aenean nec arcu ut odio tempor congue. Proin eu tellus ac nulla sollicitudin pretium eget vel erat. Fusce vel ultricies eros. Vivamus consequa</p>
+			</div>
+			<div class="content-cta">
+				<img class="cta-image" src="Asset/button.png" alt="" />
+			</div>
+		</div>
+
+	</div>
+
+</div>
+
+<script>
+	// slider
+
+	var slideIndex = 1;
+	var timeframe = 2000;
+
+	showSlides(slideIndex);
+
+	// Next/previous controls
+	function plusSlides(n) {
+		showSlides(slideIndex += n);
+	}
+
+	// Thumbnail image controls
+	function currentSlide(n) {
+		showSlides(slideIndex = n);
+	}
+
+	function showSlides(n) {
+		var i;
+		var slides = document.getElementsByClassName("slider");
+		var menus = document.getElementsByClassName("slide-menu");
+		if (n > slides.length) {slideIndex = 1}
+		if (n < 1) {slideIndex = slides.length}
+		for (i = 0; i < slides.length; i++) {
+			slides[i].style.display = "none";
+		}
+
+		for (i = 0; i < menus.length; i++) {
+			menus[i].className = menus[i].className.replace(" active", "");
+		}
+
+		slides[slideIndex-1].style.display = "flex";
+		menus[slideIndex-1].className += " active";
+
+	}
+
+	// tabs
+
+	function openTab(pageName, elmnt, color) {
+		// Hide all elements with class="tabcontent" by default */
+		var i, tabcontent, tablinks;
+		tabcontent = document.getElementsByClassName("tabcontent");
+
+
+		for (i = 0; i < tabcontent.length; i++) {
+			tabcontent[i].style.display = "none";
+		}
+
+		tablinks = document.getElementsByClassName("tab-menu");
+		for (i = 0; i < tablinks.length; i++) {
+			tablinks[i].style.backgroundColor = "";
+		}
+
+		document.getElementById(pageName).style.display = "flex";
+
+		// elmnt.style.backgroundColor = color;
+	}
+
+	document.getElementById("button-weekday").click();
+
+	// Product
+	function checkWeekend() {
+		let today = new Date();
+
+		if (today.getDay() == 6 || today.getDay() == 0) {
+			return true;
+		}
+
+		return false;
+	}
+
+	function checkOpenHour() {
+		let d = new Date();
+		let n = d.getHours();
+
+		if (n <= 10) {
+			return false;
+		}
+
+		return true;
+	}
+
+	function setProductState() {
+		var weekday = document.getElementById('weekday');
+		var weekend = document.getElementById('weekend');
+
+		var weekdayProduct = document.getElementsByClassName('weekday');
+		var weekendProduct = document.getElementsByClassName('weekend');
+
+		console.log(weekendProduct.length);
+
+		for (i = 0; i < weekdayProduct.length; i++) {
+			if (checkWeekend() == false) {
+				if (checkOpenHour()) {
+					weekday.getElementsByClassName('product-status')[i].style.display = "none";
+				} else {
+					stats = weekday.getElementsByClassName('product-status-image')[i];
+					stats.src = "Asset/overlay.png";
+					stats.style.cursor = "not-allowed";
+				}
+			} else {
+				stats = weekday.getElementsByClassName('product-status-image')[i];
+				stats.src = "Asset/overlay-tutup.png";
+				stats.style.cursor = "not-allowed";
+				weekday.getElementsByClassName('product-status')[i].style.display = "block";
+			}
+		}
+
+		for (i = 0; i < weekendProduct.length; i++) {
+			if (checkWeekend() == true) {
+				if (checkOpenHour()) {
+					console.log(weekend.getElementsByClassName('product-status'));
+					weekend.getElementsByClassName('product-status')[i].style.display = "none";
+				} else {
+					stats = weekend.getElementsByClassName('product-status-image')[i];
+					stats.src = "Asset/overlay.png";
+					stats.style.cursor = "not-allowed";
+				}
+			} else {
+				stats = weekend.getElementsByClassName('product-status-image')[i];
+				stats.src = "Asset/overlay-tutup.png";
+				stats.style.cursor = "not-allowed";
+				weekend.getElementsByClassName('product-status')[i].style.display = "block";
+			}
+		}
+	}
+	openTab('weekday', this, '#2896a8');
+	setProductState();
+
+
+
+	// Collapsible
+
+	var coll = document.getElementsByClassName("collapsible-button");
+	var i;
+
+	for (i = 0; i < coll.length; i++) {
+		coll[i].addEventListener("click", function() {
+		this.classList.toggle("active");
+		var content = this.nextElementSibling;
+		if (content.style.display === "block") {
+		  content.style.display = "none";
+		} else {
+		  content.style.display = "block";
+		}
+		});
+	}
+
+
+</script>
